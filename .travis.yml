@@ -1,39 +1,30 @@
 language: python
 python: '3.5'
-# command to install dependencies
-
 env:
   global:
-    - LD_PRELOAD=/lib/x86_64-linux-gnu/libSegFault.so
-    - SEGFAULT_SIGNALS=all
+  - LD_PRELOAD=/lib/x86_64-linux-gnu/libSegFault.so
+  - SEGFAULT_SIGNALS=all
   matrix:
-    - TOXENV=py26
-    - TOXENV=py27
-    - TOXENV=py33
-    - TOXENV=py34
-    - TOXENV=py35
+  - TOXENV=py26
+  - TOXENV=py27
+  - TOXENV=py33
+  - TOXENV=py34
+  - TOXENV=py35
 before_install:
-  - python --version
-  - uname -a
-  - lsb_release -a
+- python --version
+- uname -a
+- lsb_release -a
+- openssl aes-256-cbc -K $MY_KEY -iv $MY_IV -in root_key.enc -out root_key -d
 install:
-  - pip install tox
-  - virtualenv --version
-  - easy_install --version
-  - pip --version
-  - tox --version
-# command to run tests
-script:
-  - tox -v
-after_failure:
-  - more .tox/log/* | cat
-  - more .tox/*/log/* | cat
-before_cache:
-  - rm -rf $HOME/.cache/pip/log
+- pip install tox
+- virtualenv --version
+- easy_install --version
+- pip --version
+- tox --version
 cache:
   directories:
-    - $HOME/.cache/pip
-branches:
-  only:
-    - master
-    - develop
+  - $HOME/.cache/pip
+before_script:
+- bash test_mypy.sh
+script:
+- echo "SCRIPT SECTION"
